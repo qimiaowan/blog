@@ -46,3 +46,12 @@
 #### Child.prototype = new f();
 #### var child1 = new Child('dd', '18');
 ### 这样就可以了。
+
+## 3. es5实现数组去重 记录：
+#### [1,2,3,1,4,1,2,4,1].filter(function(ele,index,arr){
+#### 
+####         return index === arr.indexOf(ele);
+####
+#### })
+### 原理也很简单 filter中 返回的是新数组，只要条件是true的 即可添加。
+
