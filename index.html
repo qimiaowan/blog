@@ -1,7 +1,96 @@
 <!DOCTYPE html>
-<html>
-<title>hahah</title>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .list{
+            position: absolute;
+            top: 0;
+            left: 0;
+            display: none;
+        }
+        ul{
+            list-style-type: none;
+        }
+        .list li{
+            width: 100px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            font-size: 20px;
+            border:1px solid #000;
+            border-bottom: none;
+            background: #aaaaaa;
+        }
+        .list li:last-of-type{
+            border-bottom: 1px solid #000;
+
+        }
+    </style>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+
+</head>
 <body>
-123
+        <div id="allmap" style="width: 500px;height: 500px; margin: 0 auto"></div>
+        <div class="list">
+            <ul>
+                <li>11</li>
+                <li>22</li>
+                <li>33</li>
+                <li>44</li>
+                <li>55</li>   
+            </ul>
+        </div>
+
+        <script type="text/javascript">
+            // 百度地图API功能
+            var map = new BMap.Map("allmap");
+            var point = new BMap.Point(108.95,34.27);
+            map.centerAndZoom(point,12);
+        
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function(r){console.log(r.point)
+                if(this.getStatus() == BMAP_STATUS_SUCCESS){
+                    var mk = new BMap.Marker(r.point);
+                    map.addOverlay(mk);//标出所在地
+                    map.panTo(r.point);//地图中心移动
+                    //alert('您的位置：'+r.point.lng+','+r.point.lat);
+                    var point = new BMap.Point(r.point.lng,r.point.lat);//用所定位的经纬度查找所在地省市街道等信息
+                    var gc = new BMap.Geocoder();
+                    gc.getLocation(point, function(rs){
+                       var addComp = rs.addressComponents; console.log(rs.address);//地址信息
+                       alert(rs.address);//弹出所在地址
+        
+                    });
+                }else {
+                    alert('failed'+this.getStatus());
+                }        
+            },{enableHighAccuracy: true});
+            
+            let list = document.querySelector('.list');
+            let allmap = document.querySelector('#allmap');
+            allmap.ondblclick = function(e){
+                let event = e||window.event;
+                list.style.display = "block";
+                list.style.left=event.clientX+'px';
+                list.style.top=event.clientY+'px';
+            }
+            allmap.addEventListener('doubleTap',function(e){
+                let event = e||window.event;
+                list.style.display = "block";
+                list.style.left=event.clientX+'px';
+                list.style.top=event.clientY+'px';
+            })
+
+           
+        </script>
+        
 </body>
 </html>
