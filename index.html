@@ -1,167 +1,272 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-        <title>拍照上传</title>
-        <link rel="stylesheet" href="index.css"/>
-        <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
-        <script type='text/javascript' src='index.js' charset='utf-8'></script>
-        <style>
-                body{
-    margin: 0
-}
-.content{
-    padding:0.5rem;
-    display: flex;
-    align-items: center;
-    border-bottom: 1px #999 solid
-}
-.label{
-    width:5rem;
-}
-.img-area{
-    flex:1
-}
-.container{
-    background-color:#e7e7e7;
-    position: relative;
-}
-.container div{
-    text-align: center;
-    padding:0.5rem 0
-}
-.container input{
-    opacity:0;
-    filter:alpha(opacity=0);
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    z-index: 9;
-}
-.container p{
-    font-size: 0.9rem;
-    color:#999
-}
-.btn{
-    background-color: #4363ab;
-    color: #fff;
-    text-align: center;
-    padding: 0.5rem 1rem;
-    width:80%;
-    border-radius: 0.2rem;
-    margin: 2rem auto;
-    font-weight: 600;
-    font-size: 1.2rem
-}
-        </style>
-    </head>
-    <body>
-         <form id="mainForm">
-            <div class="content">
-                <div class="label">身份证</div>
-                <div class="img-area">
-                    <div class="container">
-                        <input type="file" id='id-face' name='face'  accept="image/*" />
-                        <div id='face-empty-result'>
-                            <img style='width:4rem' src="https://github.com/wangheng3751/my-resources/blob/master/images/camera.png?raw=true" alt="">
-                            <p>身份证正面照</p>
-                        </div>
-                        <img style='width: 100%' id='face-result'/>
-                    </div>
-                    <div class="container" style='margin-top:0.5rem;'>
-                        <input type="file" id='id-back' name='back' accept="image/*" />
-                        <div id='back-empty-result'>
-                            <img style='width:4rem' src="https://github.com/wangheng3751/my-resources/blob/master/images/camera.png?raw=true" alt="">
-                            <p>身份证反面照</p>
-                        </div>
-                        <img style='width: 100%' id='back-result'/>
-                    </div>
-                </div>
-            </div>
-            <div class="btn">
-                提交
-            </div>
-         </form>
-         <script>
-                 window.onload=function(){
-    document.getElementById("id-face").addEventListener("change", function(){       
-        onFileChange(this,"face-result","face-empty-result")
-    });
-    document.getElementById("id-back").addEventListener("change", function(){       
-        onFileChange(this,"back-result","back-empty-result")
-    });
-    document.getElementsByClassName("btn")[0].addEventListener("click", function(){       
-        submit();
-    });
-};
-/**
- * 选中图片时的处理
- * @param {*} fileObj input file元素
- * @param {*} el //选中后用于显示图片的元素ID
- * @param {*} btnel //未选中图片时显示的按钮区域ID
- */
-function onFileChange(fileObj,el,btnel){
-    var windowURL = window.URL || window.webkitURL;
-    var dataURL;
-    var imgObj = document.getElementById(el);
-    document.getElementById(btnel).style.display="none";
-    imgObj.style.display="block";
-    if (fileObj && fileObj.files && fileObj.files[0]) {
-        dataURL = windowURL.createObjectURL(fileObj.files[0]);
-        imgObj.src=dataURL;
-    } else {
-        dataURL = fileObj.value;
-        imgObj.style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=scale)";
-        imgObj.filters.item("DXImageTransform.Microsoft.AlphaImageLoader").src = dataURL;
-    }
-}
-/**
- * 将图片压缩后返回base64格式的数据
- * @param {*} image img元素
- * @param {*} width 压缩后图片宽度
- * @param {*} height 压缩后图片高度
- * @param {*} qua //图片质量1-100
- */
-function compressImageTobase64(image,width,height,qua){
-    var quality = qua ? qua / 100 : 0.8;
-    var canvas = document.createElement("canvas"),     
-        ctx = canvas.getContext('2d');     
-    var w = image.naturalWidth,     
-        h = image.naturalHeight;     
-    canvas.width = width||w;     
-    canvas.height = height||h;     
-    ctx.drawImage(image, 0, 0, w, h, 0, 0, width||w, height||h);
-    var data = canvas.toDataURL("image/jpeg", quality);     
-    return data;
-}
-//提交
-function submit(){
-    //1、form提交
-    //document.getElementById("mainForm").submit();
-    //2、压缩后ajax提交
-    var face_data=compressImageTobase64(document.getElementById("face-result"),200,100,90);
-    var back_data=compressImageTobase64(document.getElementById("back-result"),200,100,90);
-    var formData = new FormData();  
-    formData.append("face",face_data);
-    formData.append("back",back_data);
-    //需引入jQuery
-    $.ajax({
-        url:"/地址",
-        type: 'POST',
-        cache: false,
-        data: formData,
-        timeout:180000,
-        processData: false,
-        contentType: false,
-        success:function(r){
-        },
-        error:function(r){  
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
         }
-   });
-}
-         </script>
-    </body>
+        body{
+            /* font-family: "微软雅黑"; */
+        }
+        ul{
+            list-style: none;
+        }
+        li{
+            width: 10rem;
+            overflow: hidden;
+            clear: both;
+            border-bottom: 1px solid #d8d8d8;
+        }
+        span{
+            float: left;
+            font-size: 0.4266667rem;
+            margin-right: .54rem;
+            vertical-align: middle;            
+            width: 3.266667rem;
+            height: 1.5rem ;
+            line-height: 1.5rem;
+            text-align: right;
+        }
+        input,select,textarea,i{
+            float: left;
+           margin-top: .533333rem ;
+           
+        }
+        input{
+            width: calc(10rem - 4rem);
+            border-radius: 5px;
+            outline: none;
+            border: none;
+        }
+       
+        select{
+            width:calc(10rem - 4rem) ;
+            height: 0.8rem;
+            padding-left: 1.066667rem  ;
+            margin-top: .4rem;
+        }
+        textarea{
+            width:calc(10rem - 4rem) ;
+            height: 4rem ;
+            resize: none;
+            border: none;
+            outline: none;
+        }
+        i{
+            font-style: normal;
+            font-size: 0.4266667rem;            
+            margin:0 .4rem;
+            height: 1.5rem ;
+            line-height: 1.5rem;
+        }
+        p{
+            font-size: .373333rem ;
+            color: red;
+        }
+        .photo_a{
+            height: 5.333333rem ;
+        }
+        .photo_b{
+            height: 5.333333rem ;
+            border-bottom: none;
+        }
+        .photo_b span{
+            padding-top: .5rem;
+            height: 2rem;
+            line-height: normal;
+        }
+        .add_a{
+            float: left;
+        }
+        .add_b{
+            float: left;
+            
+        }
+        .photo_btn{
+            float: left;
+            width: 1.333333rem ;
+            height: 1.333333rem ;
+            line-height: 1.333333rem;
+            text-align: center;
+            background: #d8d8d8;
+            font-size: 1.28rem;
+            margin-top: .5rem;
+        }
+        #allmap{
+            width: 10rem;
+            height: 5.666667rem;
+            overflow: hidden;
+        }
+        .button{
+            width: 2.24rem ;
+            height: 1.066667rem;
+            line-height: 1.066667rem;
+            text-align: center;
+            color: #fff;
+            border-radius: 5px;
+            background: rgba(22, 155, 213, 1);
+            margin-left: 2rem;
+            margin-right:.8rem ;
+        }
+        .button:last-of-type{
+            margin-left: 0;
+            margin-right: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrapper">
+        <ul>
+            <li>
+                <span>车主姓名：</span>
+                <input type="text">
+            </li>
+            <li>
+                <span>联系电话：</span>
+                <input type="tel">
+            </li>
+            <li>
+                <span>第二联系人：</span>
+                <input type="text">
+            </li>
+            <li>
+                <span>第二联系电话：</span>
+                <input type="tel">
+            </li>
+            <li>
+                <span>车牌号：</span>
+                <select name="" id="">
+                    <option value="苏E888888">苏E888888</option>
+                </select>
+            </li>
+            <li>
+                <span>品牌：</span>
+                <select name="" id="">
+                    <option value="大迈X5">大迈X5</option>
+                </select>
+            </li>
+            <li>
+                <span>故障类型：</span>
+                <select name="" id="">
+                    <option value="搭电">搭电</option>
+                </select>
+            </li>
+            <li>
+                <span>故障地点：</span>
+                <input type="text">
+            </li>
+            <li>
+                <span>故障描述：</span>
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+            </li>
+            <li>
+                <span>救援类型：</span>
+                <input type="radio" name="ide" id="" style="width: .5rem ;height: .5rem;">
+                <i>立即救援</i>
+                <input type="radio" name="ide" id="" style="width: .5rem;height: .5rem;">
+                <i>预约救援</i>
+            </li>
+            <li>
+                <span>故障时间：</span>
+                <input type="time">
+            </li>
+            <li class="photo_a">
+                <span>故障特写照片：</span>
+                <div class="add_a"></div>
+                <div class="photo_btn">+</div>     
+            </li>
+            <li class="photo_b">
+                <span>车辆及环境整体照片：</span>
+                <div class="add_b"></div>
+                <div class="photo_btn">+</div>                     
+            </li>
+            <li>
+                <div style="padding-left: 2.3rem;margin-bottom: .266667rem ;">
+                    <p>注：1.故障特写照片（1-3张，至少1张）</p>
+                    <p>2.车辆及环境整体照片（1-3张，至少1张）</p>
+                    <p>3.提交救援申请前请先联系客服</p>
+                </div>
+            </li>
+            <li style="margin-top: .533333rem ;">
+                <div id="location"></div>
+                    <div id="allmap"></div>
+            </li>
+            <li>
+                <input type="button" value="联系客服" class="button">
+                <input type="button" value="提交" class="button">
+            </li>
+        </ul>
+    </div>
+    <script>
+    
+        window.onload = function(){
+            getRem();
+        };
+        window.onresize = function(){
+            getRem();
+        };
+        function getRem(pwidth,prem){
+            var html = document.getElementsByTagName("html")[0];
+            var oWidth = document.body.clientWidth || document.documentElement.clientWidth;
+            html.style.fontSize = oWidth/10 + "px";
+        }
+    
+    </script>
+    
+    
+     <script type="text/javascript">
+//     var map = new BMap.Map("allmap");
+//     var point = new BMap.Point(116.331398,39.897445);
+//     map.centerAndZoom(point,12);
+
+// function myFun(result){
+// 	var cityName = result.name;
+// 	map.setCenter(cityName);
+//     console.log(result);
+// 	console.log("当前定位城市:"+cityName);
+// 	console.log("当前纬度:"+result.center.lng,"当前经度:"+result.center.lat);
+// }
+// var myCity = new BMap.LocalCity();
+// console.log(myCity);
+// myCity.get(myFun); 
+
+  var map = new BMap.Map("allmap");
+    var point = new BMap.Point(116.331398,39.897445);
+    map.centerAndZoom(point,12);
+ 
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r){
+        if(this.getStatus() == BMAP_STATUS_SUCCESS){
+            var mk = new BMap.Marker(r.point);
+            map.addOverlay(mk);
+            map.panTo(r.point);
+        }
+        else {
+            alert('failed'+this.getStatus());
+        }
+           
+        var myGeo = new BMap.Geocoder();      
+        
+        myGeo.getLocation(new BMap.Point(r.point.lng, r.point.lat), function(result){      
+            console.log(result);
+            if (result){      
+            alert(result.address);      
+            }      
+        });
+        
+    },{enableHighAccuracy: true})
+
+
+     
+</script> 
+
+   
+</body>
 </html>
