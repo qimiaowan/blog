@@ -1,272 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <script src="http://libs.baidu.com/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/api?ak=nSxiPohfziUaCuONe4ViUP2N&v=2.0&services=false"></script> 
     <style>
-        *{
+        body,
+        html {
+            width: 100%;
+            height: 100%;
             margin: 0;
             padding: 0;
+            font-family: "微软雅黑";
         }
-        body{
-            /* font-family: "微软雅黑"; */
+
+        #l-map {
+            height: 220px;
+            width: 100%;
         }
-        ul{
-            list-style: none;
+
+        #r-result,
+        #r-result table {
+            width: 100%;
         }
-        li{
-            width: 10rem;
-            overflow: hidden;
-            clear: both;
-            border-bottom: 1px solid #d8d8d8;
+
+        .nav {
+            width: 100%;
+            height: 2em;
+            line-height: 2em;
+            background: #EDEDED;
+            border: 1px solid #ADADAD;
         }
-        span{
+
+        .nav .nav-inner {
+            width: 30%;
+            margin-left: 35%;
+        }
+
+        .nav .nav-sub {
             float: left;
-            font-size: 0.4266667rem;
-            margin-right: .54rem;
-            vertical-align: middle;            
-            width: 3.266667rem;
-            height: 1.5rem ;
-            line-height: 1.5rem;
-            text-align: right;
+            width: 33%;
         }
-        input,select,textarea,i{
-            float: left;
-           margin-top: .533333rem ;
-           
+
+        .nav .nav-sub a {
+            text-decoration: none;
         }
-        input{
-            width: calc(10rem - 4rem);
-            border-radius: 5px;
-            outline: none;
-            border: none;
+
+        .nav .nav-sub a i {
+            display: inline-block;
+            background: url("http://webmap1.map.bdstatic.com/wolfman/static/common/images/ui3/mo_banner_ba37b5d.png")
         }
-       
-        select{
-            width:calc(10rem - 4rem) ;
-            height: 0.8rem;
-            padding-left: 1.066667rem  ;
-            margin-top: .4rem;
+
+        .nav .nav-sub a.bus i {
+            background-position: -1px -192px;
+            position: relative;
+            top: 2px;
+            width: 13px;
+            height: 16px;
         }
-        textarea{
-            width:calc(10rem - 4rem) ;
-            height: 4rem ;
-            resize: none;
-            border: none;
-            outline: none;
+
+        .nav .nav-sub a.driver i {
+            background-position: -29px -194px;
+            width: 15px;
+            height: 14px;
         }
-        i{
-            font-style: normal;
-            font-size: 0.4266667rem;            
-            margin:0 .4rem;
-            height: 1.5rem ;
-            line-height: 1.5rem;
+
+        .nav .nav-sub a.walk i {
+            background-position: -102px -189px;
+            width: 16px;
+            height: 18px;
         }
-        p{
-            font-size: .373333rem ;
-            color: red;
+
+        .nav .nav-sub a.bus.cur i {
+            background-position: -15px -192px;
         }
-        .photo_a{
-            height: 5.333333rem ;
+
+        .nav .nav-sub a.driver.cur i {
+            background-position: -45px -194px;
         }
-        .photo_b{
-            height: 5.333333rem ;
-            border-bottom: none;
+
+        .nav .nav-sub a.walk.cur i {
+            background-position: -120px -189px;
         }
-        .photo_b span{
-            padding-top: .5rem;
-            height: 2rem;
-            line-height: normal;
+
+        .hide {
+            display: none;
         }
-        .add_a{
-            float: left;
+
+        input {
+            font-family: "micrsoft yahei";
+            width: 100%;
+            height: 2em;
+            font-size: 1em;
+            line-height: 2em;
+            border: 0px;
+            outline: 0px;
+            padding: .2em 1em;
         }
-        .add_b{
-            float: left;
-            
+
+        .btn-group {
+            width: 100%;
+            border-top: 1px solid #DDD;
+            border-bottom: 2px solid #DDD;
         }
-        .photo_btn{
-            float: left;
-            width: 1.333333rem ;
-            height: 1.333333rem ;
-            line-height: 1.333333rem;
+
+        button {
+            width: 32%;
             text-align: center;
-            background: #d8d8d8;
-            font-size: 1.28rem;
-            margin-top: .5rem;
-        }
-        #allmap{
-            width: 10rem;
-            height: 5.666667rem;
-            overflow: hidden;
-        }
-        .button{
-            width: 2.24rem ;
-            height: 1.066667rem;
-            line-height: 1.066667rem;
-            text-align: center;
-            color: #fff;
-            border-radius: 5px;
-            background: rgba(22, 155, 213, 1);
-            margin-left: 2rem;
-            margin-right:.8rem ;
-        }
-        .button:last-of-type{
-            margin-left: 0;
-            margin-right: 0;
+            border: 0;
+            border-radius: 0;
+            background-color: inherit;
+            height: 44px;
+            line-height: 44px;
+            font-size: 15px;
         }
     </style>
 </head>
+
 <body>
-    <div class="wrapper">
-        <ul>
-            <li>
-                <span>车主姓名：</span>
-                <input type="text">
-            </li>
-            <li>
-                <span>联系电话：</span>
-                <input type="tel">
-            </li>
-            <li>
-                <span>第二联系人：</span>
-                <input type="text">
-            </li>
-            <li>
-                <span>第二联系电话：</span>
-                <input type="tel">
-            </li>
-            <li>
-                <span>车牌号：</span>
-                <select name="" id="">
-                    <option value="苏E888888">苏E888888</option>
-                </select>
-            </li>
-            <li>
-                <span>品牌：</span>
-                <select name="" id="">
-                    <option value="大迈X5">大迈X5</option>
-                </select>
-            </li>
-            <li>
-                <span>故障类型：</span>
-                <select name="" id="">
-                    <option value="搭电">搭电</option>
-                </select>
-            </li>
-            <li>
-                <span>故障地点：</span>
-                <input type="text">
-            </li>
-            <li>
-                <span>故障描述：</span>
-                <textarea name="" id="" cols="30" rows="10"></textarea>
-            </li>
-            <li>
-                <span>救援类型：</span>
-                <input type="radio" name="ide" id="" style="width: .5rem ;height: .5rem;">
-                <i>立即救援</i>
-                <input type="radio" name="ide" id="" style="width: .5rem;height: .5rem;">
-                <i>预约救援</i>
-            </li>
-            <li>
-                <span>故障时间：</span>
-                <input type="time">
-            </li>
-            <li class="photo_a">
-                <span>故障特写照片：</span>
-                <div class="add_a"></div>
-                <div class="photo_btn">+</div>     
-            </li>
-            <li class="photo_b">
-                <span>车辆及环境整体照片：</span>
-                <div class="add_b"></div>
-                <div class="photo_btn">+</div>                     
-            </li>
-            <li>
-                <div style="padding-left: 2.3rem;margin-bottom: .266667rem ;">
-                    <p>注：1.故障特写照片（1-3张，至少1张）</p>
-                    <p>2.车辆及环境整体照片（1-3张，至少1张）</p>
-                    <p>3.提交救援申请前请先联系客服</p>
+    <div id="search">
+        <input type="text" id="start" placeholder="正在定位您的位置..." style="border-bottom: 1px solid #DDD; " />
+        <input type="text" id="end" value="金海商富中心" readonly="true" />
+        <input type="hidden" id="start_point" value="" />
+        <input type="hidden" id="end_point" value="116.501573,39.900877" />
+        <input type="hidden" id="start_location" value="" />
+        <div class="btn-group">
+            <button id="bus-search">公交</button>
+            <button id="driver-search">驾车</button>
+            <button id="walk-search">步行</button>
+        </div>
+    </div>
+    <div id="showMap" class="hide">
+        <div class="nav">
+            <div class="nav-inner">
+                <div class="nav-sub">
+                    <a href="#" class="bus">
+                        <i></i>
+                    </a>
                 </div>
-            </li>
-            <li style="margin-top: .533333rem ;">
-                <div id="location"></div>
-                    <div id="allmap"></div>
-            </li>
-            <li>
-                <input type="button" value="联系客服" class="button">
-                <input type="button" value="提交" class="button">
-            </li>
-        </ul>
+                <div class="nav-sub">
+                    <a href="#" class="driver cur">
+                        <i></i>
+                    </a>
+                </div>
+                <div class="nav-sub">
+                    <a href="#" class="walk">
+                        <i></i>
+                    </a>
+                </div>
+            </div>
+            <!-- <a href="javascript:;" id="reLocation">重新导航</a> -->
+        </div>
+        <div id="l-map"></div>
+        <div id="r-result"></div>
     </div>
     <script>
-    
-        window.onload = function(){
-            getRem();
-        };
-        window.onresize = function(){
-            getRem();
-        };
-        function getRem(pwidth,prem){
-            var html = document.getElementsByTagName("html")[0];
-            var oWidth = document.body.clientWidth || document.documentElement.clientWidth;
-            html.style.fontSize = oWidth/10 + "px";
-        }
-    
-    </script>
-    
-    
-     <script type="text/javascript">
-//     var map = new BMap.Map("allmap");
-//     var point = new BMap.Point(116.331398,39.897445);
-//     map.centerAndZoom(point,12);
+        $(function () {
+            //获取目的地的经纬度--转为一维数组
+            var ep = $("#end_point").val().split(",");
 
-// function myFun(result){
-// 	var cityName = result.name;
-// 	map.setCenter(cityName);
-//     console.log(result);
-// 	console.log("当前定位城市:"+cityName);
-// 	console.log("当前纬度:"+result.center.lng,"当前经度:"+result.center.lat);
-// }
-// var myCity = new BMap.LocalCity();
-// console.log(myCity);
-// myCity.get(myFun); 
+            //实例化地图
+            var map = new BMap.Map("l-map");
 
-  var map = new BMap.Map("allmap");
-    var point = new BMap.Point(116.331398,39.897445);
-    map.centerAndZoom(point,12);
- 
-    var geolocation = new BMap.Geolocation();
-    geolocation.getCurrentPosition(function(r){
-        if(this.getStatus() == BMAP_STATUS_SUCCESS){
-            var mk = new BMap.Marker(r.point);
-            map.addOverlay(mk);
-            map.panTo(r.point);
-        }
-        else {
-            alert('failed'+this.getStatus());
-        }
-           
-        var myGeo = new BMap.Geocoder();      
-        
-        myGeo.getLocation(new BMap.Point(r.point.lng, r.point.lat), function(result){      
-            console.log(result);
-            if (result){      
-            alert(result.address);      
-            }      
+            //设置中心点坐标
+            var point = new BMap.Point(ep[0], ep[1]);
+
+            //初始化地图
+            map.centerAndZoom(point, 16);
+
+            // 定位对象
+            var geoc = new BMap.Geocoder();
+            var geolocation = new BMap.Geolocation();
+            geolocation.getCurrentPosition(function (r) {
+                if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+                    var mk = new BMap.Marker(r.point);
+                    map.addOverlay(mk);
+                    map.panTo(r.point);
+                    $("#start_point").val(r.point.lng + ',' + r.point.lat);
+                    setLocation(r.point);
+                    showMap();
+                } else {
+                    $("#start").attr("placeholder", "请输入您的当前位置")
+                    alert('无法定位到您的当前位置，导航失败，请手动输入您的当前位置！' + this.getStatus());
+                }
+            }, { enableHighAccuracy: true });
+
+            //交通方式切换
+            $(".nav .nav-sub a").click(function () {
+                $(".nav .nav-sub a").removeClass('cur');
+                $(this).addClass('cur');
+                searchRoute();
+            })
+
+            //重新定位
+            $("#reLocation").click(function () {
+                reLocation();
+            });
+
+            //点击不同的交通方式时,当前的高亮显示
+            $("#bus-search,#driver-search,#walk-search").click(function () {
+                var id = $(this).attr("id");
+                $(".nav .nav-sub a").removeClass('cur');
+                if (id == "bus-search") {
+                    $(".nav .nav-sub a.bus").addClass('cur');
+                } else if (id == "driver-search") {
+                    $(".nav .nav-sub a.driver").addClass('cur');
+                } else if (id == "walk-search") {
+                    $(".nav .nav-sub a.walk").addClass('cur');
+                }
+                showMap();
+            })
+
+            //重新定位--重新载入地图
+            function reLocation() {
+                $("#search").show();
+                $("#showMap").hide();
+                map = new BMap.Map("l-map");
+            }
+
+            //显示地图
+            function showMap() {
+                $("#srarch").hide();
+                $("#showMap").show();
+                searchRoute();
+            }
+
+            //设置位置
+            function setLocation(point) {
+                geoc.getLocation(point, function (rs) {
+                    console.log(rs);
+                    var addComp = rs.addressComponents;
+                    var result = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                    $("#start").val(result);
+                    $("#start_location").val(result);
+                    searchRoute();
+                });
+            }
+
+            //交通方式检索---交通的结果
+            function searchRoute(s_, e_) {
+                map = new BMap.Map("l-map");
+                var cur = $(".nav .nav-sub a.cur");
+                var type = "";
+
+                if (cur.hasClass('bus')) {
+                    type = "bus";
+                } else if (cur.hasClass('driver')) {
+                    type = "driver";
+                } else if (cur.hasClass('walk')) {
+                    type = "walk";
+                } else {
+                    type = "driver";
+                }
+
+                var s_;
+                var e_;
+
+                var sl = $("#start_location").val();
+                var s = $("#start").val();
+                var sp = $("#start_point").val();
+                var e = $("#end").val();
+                var ep = $("#end_point").val();
+
+                if (s != sl) {// 如果用户修改了地址（与定位的位置不一致）则使用地址搜索
+                    s_ = s;
+                    e_ = e;
+                } else if (sp) {// 否则使用坐标搜索
+                    var ps = sp.split(",");
+                    var pe = ep.split(",");
+                    s_ = new BMap.Point(ps[0], ps[1]);
+                    e_ = new BMap.Point(pe[0], pe[1]);
+                }
+
+                if (type == "bus") {
+                    var transit = new BMap.TransitRoute(map, { renderOptions: { map: map, panel: "r-result", autoViewport: true } });
+                    transit.search(s_, e_);
+                } else if (type == "driver") {
+                    var driving = new BMap.DrivingRoute(map, { renderOptions: { map: map, panel: "r-result", autoViewport: true } });
+                    driving.search(s_, e_);
+                } else if (type == "walk") {
+                    var walking = new BMap.WalkingRoute(map, { renderOptions: { map: map, panel: "r-result", autoViewport: true } });
+                    walking.search(s_, e_);
+                }
+            }
         });
-        
-    },{enableHighAccuracy: true})
 
-
-     
-</script> 
-
-   
+    </script>
 </body>
+
 </html>
