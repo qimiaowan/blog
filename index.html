@@ -1,120 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>demo</title>
-    <style id="oCss">
-        body{
-            background-color: #F6F6F6;
-        }
-        #aDiv{
-            width: 200px;
-            height: 200px;
-            border: 2px solid #000000;
-            -webkit-border-radius: 50%;
-            -moz-border-radius: 50%;
-            border-radius: 50%;
-            margin:100px auto;
-            position:relative;
-            background-color: #fff;
-        }
-        #aUl{
-            margin:0;
-            padding:0;
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=nSxiPohfziUaCuONe4ViUP2N"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
             list-style-type: none;
-            position: relative;
-            height: 200px;
         }
-        #aUl li{
-            position: absolute;
-            width: 2px;
-            height: 10px;
-            top:0;
-            left: 99px;
-            background-color: #000000;
-            transform-origin:center 100px;
+        a{
+            text-decoration: none;
         }
-        #aUl li:nth-of-type(5n+1){
-            width: 3px;
-            height: 15px;
-        }
-        #hour{
-            width: 5px;
-            height: 40px;
-            position: absolute;
-            background-color: #000000;
-            top: 60px;
-            left: 97.5px;
-            transform-origin:bottom;
-        }
-        #min{
-            width: 4px;
-            height: 55px;
-            position: absolute;
-            background-color: #999;
-            top:45px;
-            left:98px;
-            transform-origin:bottom;
-        }
-        #sec{
-            width: 2px;
-            height: 65px;
-            position: absolute;
-            background-color: red;
-            top:35px;
-            left:99px;
-            transform-origin:bottom;
-        }
-        #icon{
-            width: 20px;
-            height: 20px;
-            background: #000000;
-            border-radius: 50%;
-            position: absolute;
-            top: 90px;
-            left: 90px;
-            transform-origin:bottom;
-        }
+    #allmap{
+    width: 50vw;
+    height: 23.333333rem ;
+    margin: 0  auto;
+    overflow: hidden;
+}
+.temple{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,.3);
+    z-index: 9999999999999999;
+}
+.menu{
+    padding: .533333rem .8rem 0;
+    padding-top: .533333rem ;
+    background: #fff;
+    border-radius: .133333rem;
+    position: absolute;
+    z-index: 99999999999999999;
+    top: 0;
+    left: 0;
+}
+.menu h1{
+    font-size: .533333rem;
+    text-align: center;
+    padding-bottom: .533333rem;
+}
+.menu ul{
+   font-size: 0;
+   text-align: center;
+   padding-bottom: .533333rem;
+}
+.menu li{
+    font-size: .533333rem;
+    color: #77a1ef;
+    display:inline-block;
+    cursor: pointer;
+}
+.menu li a{
+    color: #77a1ef;
+}
+.menu li:first-of-type{
+    margin-right: 1.33333rem;
+}
     </style>
 </head>
 <body>
-    <div id="aDiv">
-        <ul id="aUl">
-        </ul>
-        <div id="hour"></div>
-        <div id="min"></div>
-        <div id="sec"></div>
-        <div id="icon"></div>
-    </div>
+        <div id="allmap"></div>
     <script>
-        var aDiv=document.getElementById('aDiv');
-        var aUl1=document.getElementById('aUl');
-        var oCss=document.getElementById('oCss');
-        var ahour=document.getElementById('hour');
-        var amin=document.getElementById('min');
-        var asec=document.getElementById('sec');
-        var item='';
-        var srce='';
-        for(var i=0;i<60;i++){
-            srce+='#aUl li:nth-of-type('+(i+1)+'){transform:rotate('+i*6+'deg);}';
-            item+='<li></li>'
+        var points = [{ "lat": 31.31798737, "lng": 120.61990712 },{ "lat": 33.31798737, "lng": 120.61990712 }, { "lat": 32.595054, "lng": 120.135204 }, { "lat": 30.595054, "lng": 120.135204 }, { "lat": 32.330054, "lng": 120.630204 }];
+        var map = new BMap.Map("allmap");
+        var view = map.getViewport(points);
+        var mapZoom = view.zoom;
+        var centerPoint = view.center;
+        map.centerAndZoom(centerPoint, mapZoom);
+        map.enableScrollWheelZoom(true);
+        for (var i = 0; i < points.length; i++) {
+            var item = points[i];
+            var p = new BMap.Point(item.lng, item.lat);
+            console.log(p);
+        //自定义点图标
+        // var iconUrl = "img/markers.png";
+        // var myIcon = new BMap.Icon(iconUrl, new BMap.Size(20, 26));
+        // var marker = new BMap.Marker(p, { icon: myIcon }); 
+        var marker = new BMap.Marker(p);
+        (function(i){
+            marker.addEventListener("click",function(){
+            fun(i,this);
+        });
+        })(i);
+        map.addOverlay(marker);   
         }
-        aUl1.innerHTML=item;
-        oCss.innerHTML+=srce;
-        tomove();
-     setInterval(tomove,1000);
-        function tomove(){
-            var aDate=new Date();
-            var sec=aDate.getSeconds();
-            var min=aDate.getMinutes()+sec/60;
-            var hour=aDate.getHours()+min/60;
-
-            ahour.style.transform='rotate('+hour*30+'deg)';
-            amin.style.transform='rotate('+min*6+'deg)';
-            asec.style.transform='rotate('+sec*6+'deg)';
-
+        function fun(aa,that){
+            var allmap = document.querySelector("#allmap");
+            if(document.querySelector(".temple")){
+                var temple = document.querySelector(".temple");
+                allmap.removeChild(temple);
+            }
+            var myGeo = new BMap.Geocoder();
+            myGeo.getLocation(new BMap.Point( points[aa].lng, points[aa].lat), function (result) {
+                if (result) {
+                    var temple = document.createElement("div");
+                    var add = document.createElement("div");
+                    var h1 = document.createElement("h1");
+                    var ul = document.createElement("ul");
+                    var liA = document.createElement("li");
+                    var liB = document.createElement("li");
+                    var telA = document.createElement("a");
+                    temple.classList.add("temple");
+                    add.classList.add("menu");
+                    h1.innerHTML = result.address;
+                    liA.innerHTML = "菜单";
+                    telA.href = "tel:15896217685";
+                    telA.innerHTML = "电联";
+                    add.appendChild(h1);
+                    ul.appendChild(liA);
+                    liB.appendChild(telA);
+                    ul.appendChild(liB);
+                    add.appendChild(ul);
+                    add.style.left = that.Ac.style.left;
+                    add.style.top = that.Ac.style.top;
+                    temple.addEventListener("click",function(){
+                        allmap.removeChild(this);
+                    })
+                    temple.appendChild(add);
+                    allmap.appendChild(temple);
+                }
+            });
         }
+       
     </script>
 </body>
+
 </html>
