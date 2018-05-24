@@ -66,6 +66,7 @@
 ####     });
 #### Object型参数，这个对象有两个选项，也就是对象里面的key。block与之前的Boolean型参数一致，不过值不再是true和false，是更语义化的start和end。
 #### 另一个选项是behavior,MDN上给出三个可取的值，分别是auto、instant与smooth。这个选项决定页面是如何滚动的，实测auto与instant都是瞬间跳到相应的#### 位置,smooth是有动画效果的
+### 下面是个例子：
 #### <script>
 ####        const scrollIntoView = document.querySelector(".scrollIntoView");
 ####        const chunk = document.querySelector(".chunk");
