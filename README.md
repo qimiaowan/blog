@@ -66,24 +66,24 @@
 ####     });
 #### Object型参数，这个对象有两个选项，也就是对象里面的key。block与之前的Boolean型参数一致，不过值不再是true和false，是更语义化的start和end。
 #### 另一个选项是behavior,MDN上给出三个可取的值，分别是auto、instant与smooth。这个选项决定页面是如何滚动的，实测auto与instant都是瞬间跳到相应的#### 位置,smooth是有动画效果的
-<script>
-        const scrollIntoView = document.querySelector(".scrollIntoView");
-        const chunk = document.querySelector(".chunk");
-        const scrollIntoViewIfNeededT = document.querySelector(".scrollIntoViewIfNeeded-top");
-        const scrollIntoViewIfNeededB = document.querySelector(".scrollIntoViewIfNeeded-bottom");
-        scrollIntoView.addEventListener("click",fun,false);
-        scrollIntoViewIfNeededT.addEventListener("click",funa,false);
-        scrollIntoViewIfNeededB.addEventListener("click",funb,false);
-        function fun(){
-            chunk.scrollIntoView(true);
-        }
-        function funa(){
-            chunk.scrollIntoViewIfNeeded(true); //在看不到chunk 的情况下点击才有效 会居中
-        }
-        function funb(){
-            chunk.scrollIntoViewIfNeeded(false); //在看不到chunk 的情况下点击才有效 会在上面也可能下面 看哪边离的近
-        }
-    </script>
+#### <script>
+####        const scrollIntoView = document.querySelector(".scrollIntoView");
+####        const chunk = document.querySelector(".chunk");
+####        const scrollIntoViewIfNeededT = document.querySelector(".scrollIntoViewIfNeeded-top");
+####        const scrollIntoViewIfNeededB = document.querySelector(".scrollIntoViewIfNeeded-bottom");
+####       scrollIntoView.addEventListener("click",fun,false);
+####        scrollIntoViewIfNeededT.addEventListener("click",funa,false);
+####        scrollIntoViewIfNeededB.addEventListener("click",funb,false);
+####        function fun(){
+####            chunk.scrollIntoView(true);
+####        }
+####        function funa(){
+####            chunk.scrollIntoViewIfNeeded(true); //在看不到chunk 的情况下点击才有效 会居中
+####        }
+####        function funb(){
+####            chunk.scrollIntoViewIfNeeded(false); //在看不到chunk 的情况下点击才有效 会在上面也可能下面 看哪边离的近
+####        }
+####    </script>
 
 
  
