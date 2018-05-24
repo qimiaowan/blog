@@ -55,3 +55,17 @@
 #### })
 ### 原理也很简单 filter中 返回的是新数组，只要条件是true的 即可添加。
 
+## 4.html5里面的scrollIntoView应用 2018.5.24
+###  不传参数的情况下 类似a锚点
+### 如果传参数 有2种格式 一种是布尔值 一种是对象 首先是布尔值：
+#### 如果传true 元素的顶端将和其所在滚动区的可视区域的顶端对齐。若为false，元素的底端将和其所在滚动区的可视区域的底端对齐
+### 对象的话  首先ie是不支持的 
+####   test.scrollIntoView({
+####        block: 'start',
+####        behavior: 'smooth'
+####     });
+#### Object型参数，这个对象有两个选项，也就是对象里面的key。block与之前的Boolean型参数一致，不过值不再是true和false，是更语义化的start和end。
+#### 另一个选项是behavior,MDN上给出三个可取的值，分别是auto、instant与smooth。这个选项决定页面是如何滚动的，实测auto与instant都是瞬间跳到相应的#### 位置,smooth是有动画效果的
+
+
+ 
